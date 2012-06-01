@@ -1,0 +1,110 @@
+<html>
+  <head>
+    <title>HTML5Video - Workshop</title>
+    <script type='text/javascript'>
+
+      (function(){
+
+        var canvases = [];
+        var timeoutInterval = 50;
+        var currentCanvasInterval = 0;
+        var source = 'video';
+        var video, webcam, drawTimeout, stopTimeout, currentCanvasInterval;
+
+        var drawVideoFrameToCanvas = function() {
+          canvas = canvases[currentCanvasInterval];
+          var ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(source == 'video' ? video : webcam, 0, 0);
+          drawTimeout = setTimeout(
+            function(){
+              drawVideoFrameToCanvas();
+              currentCanvasInterval++
+              if(currentCanvasInterval == canvases.length) {
+                currentCanvasInterval = 0;
+              }
+            },
+            timeoutInterval
+          );
+        };
+
+        var onplayHandler = function(){
+          drawTimeout = setTimeout(
+            function(){
+              drawVideoFrameToCanvas();
+            },
+            timeoutInterval
+          );
+        };
+
+        var onstopHandler = function(){
+          clearTimeout(drawTimeout);
+        };
+
+        var addCanvas = function(containerId, width, height, top, left) {
+          var container = document.getElementById(containerId);
+          var canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          canvas.top = top;
+          canvas.left = left;
+          canvases.push(canvas);
+          container.appendChild(canvas);
+        }
+
+
+        var drawWebcamToVideo = function(stream) {
+          var URL = window.URL || window.webkitURL;
+          var objectUrl = URL.createObjectURL(stream);
+          webcam.src = objectUrl;
+        };
+
+        var startWebcam = function() {
+          navigator.webkitGetUserMedia(
+            {audio:true, video:true},
+            function(stream) {
+              drawWebcamToVideo(stream);
+              if(source == 'webcam'){
+                canvas = canvases[currentCanvasInterval];
+                var ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(webcam, 0, 0);
+              }
+            }
+          );
+        }
+        var onloadHandler = function() {
+          video = document.getElementById('movie');
+          webcam = document.getElementById('webcam');
+          for(var i = 0; i < 1; i++) {
+            addCanvas('canvasContainer', video.width, video.height, 0, 0);
+          }
+          video.addEventListener('play', onplayHandler, false);
+          video.addEventListener('stop', onstopHandler, false);
+          drawVideoFrameToCanvas();
+          video.onmouseover = function() { source = 'video'; }
+          webcam.onmouseover = function() { source = 'webcam'; }
+          startWebcam();
+        };
+
+        window.onload = onloadHandler;
+
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class='left' style='float:left'>
+      <video width='500' height='500' controls='controls' id='movie'>
+        <source src='videos/test_video_1.mp4' type='video/mp4' />
+      </video>
+    </div>
+    <div class='right' style='float:left;'>
+      <video width='500' height='500' id='webcam' autoplay></video>
+    </div>
+    <div style='clear:both;'></div>
+    <hr>
+    <div id='canvasContainer'>
+    </div>
+  </body>
+</html>
