@@ -8,6 +8,8 @@
       li { float: left; margin: 10px; }
       h3 { text-align: center; }
       .clear { clear:both; }
+      .canvasContainer { text-align:center; width:100%; margin-left:auto; margin-right:auto; }
+      .videosContainer { text-align:center; width:100%; margin-left: -webkit-calc(50% - 626px); }
     </style>
     <script type='text/javascript'>
 
@@ -39,19 +41,22 @@
     </script>
   </head>
   <body>
-    <ul>
-      <li>
-        <h3> Video from Movie </h3>
-        <video src='videos/test_video_1.mp4' width='500' height='281' id='movie' autoplay></video>
-      </li>
-      <li>
-        <h3> Video from Webcam</h3>
-        <video width='500' height='281' id='webcam'></video>
-      </li>
-    </ul>
+    <div class='videosContainer'>
+      <ul>
+        <li>
+          <h3> Video from Movie </h3>
+          <video src='videos/test_video_1.mp4' width='500' height='281' id='movie' autoplay></video>
+        </li>
+        <li>
+          <h3> Video from Webcam</h3>
+          <video width='500' height='281' id='webcam'></video>
+        </li>
+      </ul>
+    </div>
     <div class='clear'></div>
+    <div class='canvasContainer'>
       <h3> Canvas </h3>
       <canvas width='500' height='281' id='canvas'></canvas>
-    </ul>
+    </div>
   </body>
 </html>
