@@ -1,7 +1,8 @@
 <html>
   <head>
-    <title>HTML5Video - Workshop</title>
+    <title>HTML5 Workshop - Webcam to Video</title>
     <script type='text/javascript' src='javascript/video-to-canvas.js'></script>
+    <script type='text/javascript' src='javascript/webcam-to-video.js'></script>
     <style type='text/css'>
       ul { list-style:none; }
       li { float: left; margin: 10px; }
@@ -18,15 +19,11 @@
 
         var onloadHandler = function() {
 
-          video = document.getElementById('movie');
+          video = document.getElementById('video');
           canvas = document.getElementById('canvas');
 
-          videoToCanvas = new VideoToCanvas(video, canvas);
-
-          video.addEventListener('play', onplayHandler, false);
-          video.addEventListener('stop', onstopHandler, false);
-
-          videoToCanvas.start();
+          webcamToVideo = new WebcamToVideo(video, canvas);
+          webcamToVideo.start();
         };
 
         window.onload = onloadHandler;
@@ -38,14 +35,12 @@
   <body>
     <ul>
       <li>
-        <h3> Video </h3>
-        <video width='500' height='281' controls='controls' id='movie'>
-          <source src='videos/test_video_1.mp4' type='video/mp4' />
+        <h3> Webcam Video </h3>
         </video>
       </li>
       <li>
         <h3> Canvas</h3>
-        <canvas width='500' height='281' id='canvas' autoplay></canvas>
+        <canvas width='500' height='281' id='canvas'></canvas>
       </li>
     </ul>
   </body>
